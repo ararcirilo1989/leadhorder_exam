@@ -1,0 +1,51 @@
+﻿
+<form asp-action="UploadPartial" asp-controller="Home" data-ajax="true" data-ajax-method="POST" enctype="multipart/form-data"
+      data-ajax-success="SuccessRedirect" class="form-horizontal" id="form0" data-ajax-begin="Confirm">
+    <div class="mb-3">
+        <label for="csvFile" class="form-label">Upload file to Google Drive</label>
+        <input type="file" class="form-control" name="csvFile" id="csvFile" required onchange="onChangeFile()">
+        <small class="text-muted">File size must not exceed 25mb</small>
+    </div>
+    <div class="col-12">
+        <button id="submitBtn" class="btn btn-primary" type="submit">Upload</button>
+    </div>
+    <div class="alert alert-warning alert-dismissible fade mt-1" role="alert"></div>
+</form>
+
+<script>
+    function SuccessRedirect(response) {
+        if (response.success) {
+            $('.alert').removeClass("show").html("");
+            var url = '@Html.Raw(Url.Action("CitiesPartial", "Home"))';
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/html; charset=utf-8",
+                data: { cityNames: response.cities },
+                dataType: "html",
+                traditional: true,
+                success: function (result) {
+                    $('#CityContainer').html(result);
+                },
+                error: function (xhr, status) {
+                    $('.alert').addClass("show").html(result.msg)
+                }
+            }).always(() => {
+                $('#submitBtn').removeClass("disabled");
+            });
+        }
+        else {
+            $('.alert').addClass("show").html(response.msg);
+            $('#submitBtn').removeClass("disabled");
+        }
+    }
+    function Confirm() {
+        $('.alert').removeClass("show").html("");
+        $('#submitBtn').addClass("disabled");
+    }
+
+    function onChangeFile() {
+        $('.alert').removeClass("show").html("");
+        $('#CityContainer').html("");
+    }
+</script>

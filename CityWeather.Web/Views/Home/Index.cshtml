@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="col-12 my-3">
+    <div id="UploadContainer"></div>
+</div>
+<hr />
+<div class="col-12">
+    <div id="CityContainer" class="row"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var url = '@Html.Raw(Url.Action("UploadPartial", "Home"))';
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/html; charset=utf-8",
+            dataType: "html",
+            success: function (result) {
+                $('#UploadContainer').html(result);
+            },
+            error: function (xhr, status) {
+            }
+        });
+    });
+</script>

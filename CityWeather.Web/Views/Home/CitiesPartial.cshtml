@@ -1,0 +1,31 @@
+﻿@model CityWeather.Web.ViewModels.CityViewModel
+
+@foreach (var city in Model.CityModels)
+{
+    var date = (new DateTime(city.Dt)).ToString("MMM/dd/yyyy hh:mm");
+    var weather = city.Weather != null ? city.Weather?.FirstOrDefault()?.Main : "Unknown";
+    bool hasError = !string.IsNullOrEmpty(city.Error);
+    <div class="col-md-6 mb-2">
+        <div class="justify-content-center">
+            <div class="card p-4">
+                <div class="d-flex">
+                    <h6 class="flex-grow-1">@city.Name</h6>
+                    @if (hasError)
+                    {
+                        <span><i class="fas fa-exclamation-triangle text-warning"></i> @city.Error</span>
+                    }
+                </div>
+                <div class="d-flex flex-column temp mt-5 mb-3">
+                    <h1 class="mb-0 font-weight-bold" id="heading"> @city.Main?.Temp° C </h1> <span class="small grey">@weather</span>
+                </div>
+                <div class="d-flex">
+                    <div class="temp-details flex-grow-1">
+                        <p class="my-1" title="Wind"> <i class="fas fa-wind"></i> <span> @city.Wind?.Speed km/h </span> </p>
+                        <p class="my-1" title="Humidity"> <i class="fas fa-tint" ></i> <span> @city.Main?.Humidity% </span> </p>
+                    </div>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
